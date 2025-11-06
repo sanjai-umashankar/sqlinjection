@@ -27,26 +27,26 @@ Identify IP address using ifconfig in Metasploitable2
 
 Use the above ip address to access the apache webserver of Metasploitable2 from kali/parrot linux. In Kali Linux use the ip address in a web browser.
 ##  OUTPUT
-
+![alt text](<Screenshot 2025-10-31 133123.png>)
 
 Select Multidae from the menu listed as shown above. The page is displayed as below:
 ##  OUTPUT
 
-
+![alt text](<img/Screenshot (8).png>)
 
 Click on the menu Login/Register and register for an account
 ##  OUTPUT
-
+![alt text](<img/Screenshot (9).png>)
 
 
 Click on the link “Please register here”
 ##  OUTPUT
-
+![alt text](<img/Screenshot (10).png>)
 
 
 Click on “Create Account” to display the following page:
 ##  OUTPUT
-
+![alt text](<img/Screenshot (11).png>)
 
 The login structure we will use in our examples is straightforward. It contains two input fields (username and password), which are both vulnerable. The back-end content creates a query to approve the username and secret key given by the client. Here is an outline of the page rationale:
 
@@ -54,12 +54,12 @@ The login structure we will use in our examples is straightforward. It contains 
 ($query = “SELECT * FROM users WHERE username=’$_POST[username]’ AND password=’$_POST[password]’“;).
  For the username put “ganesh” or “anything” and for the password put (anything’ or ‘1’=’1) or (admin’ or ‘1’=’1) then try to log in, and you’ll be presented with an admin login page.
 ##  OUTPUT
-
+![alt text](<img/Screenshot (12).png>)
 
 
 Click “Login”. The logged in page will show as below:
 ##  OUTPUT
-
+![alt text](<img/Screenshot (13).png>)
 
 
 If error faced in registration follow the following steps in metasploitable 2:
@@ -74,12 +74,12 @@ sudo nano /var/www/mutillidae/config.inc
 Type msfadmin when prompted for the root password. 
 Once nano opens config.inc file, look for the line $dbname = ‘metasploit’ as shown in Figure  below:
 ##  OUTPUT
-
+![alt text](<img/Screenshot (14).png>)
 
 Replace ‘metasploit’ with ‘owasp10’ and make sure the lines end with semicolon ; as shown in Figure
 ##  OUTPUT
 
-
+![alt text](<img/Screenshot (10).png>)
 
 
 Save and exit the config.inc
@@ -90,11 +90,7 @@ sudo /etc/init.d/apache2 reload
 ##  OUTPUT
 
 
-
-
-# Reset Mutillidae database
-Refresh the page then clicking on the Reset DB menu option to reset the Mutillidae database [Figure ]. Click OK when prompted.
-##  OUTPUT
+![alt text](<img/Screenshot (11).png>)
 
 
 
@@ -104,8 +100,8 @@ Refresh the page then clicking on the Reset DB menu option to reset the Mutillid
 Alright. Now is time to test if we managed to fix the database issue. Go ahead and register a new account on the Mutillidae webpage.
 
  The Mutillidae database error no longer appears 
-#OUTPUT
-
+## OUTPUT
+![alt text](<img/Screenshot (11).png>)
 
 
 Now after logging out you will see the login page. In the login page give ganesh’ # (myusername). You can see the page now enters into the administrator page as before when giving the password.
@@ -125,7 +121,7 @@ we will be using the “User Info” page from Mutillidae to perform a Union-Bas
 After logging out, Now choose the menu as shown below:
 ##  OUTPUT
 
-
+![alt text](<Screenshot 2025-10-31 141354.png>)
 
 From this point, all our attack vectors will be performed in the URL section of the page using the Union-Based technique.There are two different ways to discover how many columns are selected by the original query. The first is to infuse an “ORDER BY” statement indicating a column number. Given the column number specified is higher than the number of columns in the “SELECT” statement, an error will be returned.
 ##  OUTPUT
@@ -136,7 +132,7 @@ Since we do not know the number of columns, we start at 1. To find the exact amo
 
 The browser url of this info page need to be modified with the url as below:
 ##  OUTPUT
-
+![alt text](<img/Screenshot (13).png>)
 
 
 
@@ -160,7 +156,7 @@ When we ordered by 5, it worked and displayed some information. It means there a
 
 Instead of using the "order by" option, let’s use the "union select" option and provide all five columns. Ex: (union select 1,2,3,4,5).
 ##  OUTPUT
-
+![alt text](<img/Screenshot (16).png>)
 
 
 As given in the screenshot below columns 2,3,4 are usable in which we can substitute any sql commands to extract necessary information.
@@ -183,7 +179,7 @@ Replace the query in the url with the following one:
 union select 1,table_name,null,null,5 from information_schema.tables where table_schema = ‘owasp10’
 ##  OUTPUT
 
-
+![alt text](<img/Screenshot (17).png>)
 
 
 The url once executed will  retrieve table names from the “owasp 10” database.
@@ -198,7 +194,7 @@ Ex: (union select 1,colunm_name,null,null,5 from information_schema.columns wher
 Here we are trying to extract column names from the “accounts” table.
 ##  OUTPUT
 
-
+![alt text](<img/Screenshot (18).png>)
 
 The column names of the accounts is displayed below for the following url:
 
@@ -207,7 +203,7 @@ Once we discovered all available column names, we can extract information from t
 
 Ex: (union select 1,username,password,is_admin,5 from accounts).
 ##  OUTPUT
-
+![alt text](<img/Screenshot (19).png>)
 
 
 ## Reading and writing files on the web-server
@@ -217,7 +213,7 @@ Ex: (union select null,load_file(‘/etc/passwd’),null,null,null).
 
 
 ##  OUTPUT
-
+![alt text](<img/Screenshot (20).png>)
 
 ## RESULT:
 The SQL Injection vulnerability is successfully exploited using the Multidae web application in Metasploitable2.
